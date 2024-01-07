@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
-import { useGoogleLogin } from "@react-oauth/google";
-import axios from "axios";
-
+// import { useGoogleLogin } from "@react-oauth/google";
+// import axios from "axios";
+import { jwtDecode } from "jwt-decode";
 // import { useNavigate } from "react-router-dom";
 
 // import GoogleLogin from "react-google-login";
@@ -13,16 +13,16 @@ import logo from "../assets/logowhite.png";
 
 function Login() {
 	const responseGoogle = (response) => {
-		// localStorage.setItem("user", JSON.stringify(response.profileObj));
-		// const { name, googleId, imageUrl } = response.profileObj;
-		// const doc = {
-		// 	_id: googleId,
-		// 	_type: "user",
-		// 	userName: name,
-		// 	image: imageUrl,
-		// };
-		// console.log(doc);
-		console.log(response);
+		const token = response.credential;
+		const decodedToken = jwtDecode(token);
+		const { name, aud, picture } = decodedToken;
+		const doc = {
+			_id: aud,
+			_type: "user",
+			userName: name,
+			// userEmail: email,
+			image: picture,
+		};
 	};
 	return (
 		<div className="flex justify-start items-center flex-col h-screen">
@@ -33,18 +33,6 @@ function Login() {
 						<img src={logo} width="130px" className="mb-10" />
 					</div>
 					<div className="shadow-2xl">
-						{/* <GoogleLogin
-							clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-							render={(renderProps) => (
-								<button type="button" className="bg-mainColor flex justify-center items-center p-3 cursor-pointer outline-none rounded-lg" onClick={renderProps.onClick} disabled={renderProps.disabled}>
-									<FcGoogle className="mr-4" />
-									Login with Google
-								</button>
-							)}
-							onSuccess={responseGoogle}
-							onFailure={responseGoogle}
-							cookiePolicy={"single_host_origin"}
-						/> */}
 						<GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
 							<GoogleLogin onSuccess={responseGoogle} onError={responseGoogle} />
 						</GoogleOAuthProvider>

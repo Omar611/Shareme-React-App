@@ -32,7 +32,7 @@ function Login() {
 				<video className="absolute w-full h-full object-cover" src={shareVideo} autoPlay loop muted type="video/mp4"></video>
 				<div className="absolute flex flex-col justify-center items-center w-full h-full bg-blackOverlay">
 					<div className="flex justify-center items-center flex-col">
-						<img src={logo} width="130px" className="mb-10" />
+						<img src={logo} width="130px" className="mb-10" alt="ShareMe" />
 					</div>
 					<div className="shadow-2xl">
 						<GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>

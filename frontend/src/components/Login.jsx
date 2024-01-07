@@ -1,28 +1,30 @@
 import React from "react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { GoogleLogin } from "@react-oauth/google";
-// import { useGoogleLogin } from "@react-oauth/google";
-// import axios from "axios";
 import { jwtDecode } from "jwt-decode";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-// import GoogleLogin from "react-google-login";
-// import { FcGoogle } from "react-icons/fc";
 import shareVideo from "../assets/share.mp4";
 import logo from "../assets/logowhite.png";
+import { client } from "../client";
 
 function Login() {
+	const navigate = useNavigate();
+
 	const responseGoogle = (response) => {
 		const token = response.credential;
 		const decodedToken = jwtDecode(token);
-		const { name, aud, picture } = decodedToken;
+		const { name, sub, picture } = decodedToken;
 		const doc = {
-			_id: aud,
+			_id: sub,
 			_type: "user",
 			userName: name,
-			// userEmail: email,
 			image: picture,
 		};
+
+		client.createIfNotExists(doc).then(() => {
+			navigate("/", { replace: true });
+		});
 	};
 	return (
 		<div className="flex justify-start items-center flex-col h-screen">
